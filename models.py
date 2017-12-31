@@ -21,8 +21,8 @@ class Category(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String(250))
-    # user_id = Column(Integer, ForeignKey('user.id'))
-    # user = relationship(User)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
     
     # Add a property decorator to serialize information from the database
     @property
@@ -40,9 +40,9 @@ class Item(Base):
     name = Column(String(250))     
     description = Column(String(1500))
     category_id = Column(Integer, ForeignKey('category.id'))    
-    # user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     category = relationship(Category)
-    # user = relationship(User)
+    user = relationship(User)
     
     @property
     def serialize(self):
