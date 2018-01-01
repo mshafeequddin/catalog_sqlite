@@ -1,24 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Udacity-Catalog Project</title>
+
+<!-- CSS -->
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='css/bootstrap.css') }}">
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	<h2>{{item.name}}</h2>
-	<div>{{item.description}}</div>
-	<div>{{item.price}}</div>
-	<br />
-	<a
-		href="{{url_for('edit_item', category_name = category.name, item_name = item.name)}}">Edit</a>
+	<main class="container"> 
+	<header class="row">
+		<h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
+		<div class="col-md-6"></div>
+		<!--<h1 class="col-md-2 text-right"><a href="#">Login</a></h1>-->
+		<div class="col-md-2 text-right">
+			<form method="GET" action="{{url_for('showLogin')}}">
+				<button type="submit" class="text-center btn btn-default login">Login</button>
+			</form>
+		</div>
+	</header>
+	<section class="row vdivide">
+		<sidebar class="col-md-3">
+		<h2>{{category.name}} Items</h2>
+		<form action="#" method="POST">
+			<a href="{{url_for('add_item',category_name = category.name)}}">Add
+				New Item(+)</a> 
+			<!-- <br /> <br /> -->
+			<hr/>
+			<ul class="text-left">
 
-	<span>|</span>
-
-	<a
-		href="{{url_for('delete_item',category_name = category.name, item_name = item.name)}}">Delete</a>
-	<br />
-	<br />
-
-	<br />
+				{% for item in items %}
+ 					<li>
+ 						<a href="{{url_for('show_item', category_name = category.name, item_name = item.name)}}"><span class="item-category">{{item.name}}</span></a>
+					</li>
+				{% endfor %}
+			</ul>
+		</form>
+		</sidebar>
+		<section class="col-md-9 items">
+			<h2>{{item.name}}</h2>
+			<div>{{item.description}}</div>
+			<a
+				href="{{url_for('edit_item', category_name = category.name, item_name = item.name)}}">Edit</a>
+		
+			<span class="latest-category">|</span>
+		
+			<a
+				href="{{url_for('delete_item',category_name = category.name, item_name = item.name)}}">Delete</a>
+			<br />
+			<br />
+		</section>
+	</section>
+	</main>
 </body>
 </html>

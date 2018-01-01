@@ -19,6 +19,7 @@ import json
 from flask import make_response
 import requests
 import os
+from gettext import Catalog
 
 app = Flask(__name__)
 
@@ -43,10 +44,11 @@ items = [{'name':'Television', 'description':'42 inch LED Display', 'price':'$89
 def show_categories():
     ''' Show categories with Latest Items on the home page'''
     categories = session.query(Category).all()
+    latestItems = session.query(Item.name.label('itemName'),Category.name.label('categoryName')).filter(Item.category_id == Category.id).order_by(Item.id.desc()).limit(5)
     if 'username' not in login_session or 'username' is None:  # no name was returned in some cases
-        return render_template('public_catalog.html', categories=categories)
+        return render_template('public_catalog.html', categories=categories, latestItems = latestItems)
     else:
-        return render_template('catalog.html', categories=categories)
+        return render_template('catalog.html', categories=categories, latestItems = latestItems)
 
 
 @app.route('/catalog/<category_name>/')
@@ -54,12 +56,13 @@ def show_categories():
 def show_category_items(category_name):
 #     print("in the show_category_items :" + category_name)
     category = session.query(Category).filter_by(name=category_name).first()
+    categories = session.query(Category).all()
     if category is not None:
         items = session.query(Item).filter_by(category_id=category.id)
         if 'username' not in login_session:
-            return render_template('public_category.html', category=category, items=items)            
+            return render_template('public_category.html', category=category, items=items, categories = categories)            
         else:
-            return render_template('category.html', category=category, items=items)
+            return render_template('category.html', category=category, items=items, categories = categories)
     else:
         return "No Items to display"  # message flashing 
 
@@ -69,13 +72,14 @@ def  show_item(category_name, item_name):
     category = session.query(Category).filter_by(name=category_name).first()
     if category is not None:
         item = session.query(Item).filter_by(category_id=category.id, name=item_name).first()
+        items = session.query(Item).filter_by(category_id = category.id).order_by(Item.category_id).all()
         # Atleast the user has to be logged in to be able to edit or delete the item.
         # There is a scope of improvement to differentiate between the signed in user and
         # the creator of the item and then display different pages respectively.
         if 'username' not in login_session or item.user_id != login_session['user_id']:
-            return render_template('public_item.html', category=category, item=item)
+            return render_template('public_item.html', category=category, item=item, items = items)
         else:
-            return render_template('item.html', category=category, item=item)
+            return render_template('item.html', category=category, item=item, items = items)
     else:
         return "No Item Info to display"  # message flashing
 

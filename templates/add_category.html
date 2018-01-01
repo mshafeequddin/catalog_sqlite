@@ -1,17 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Udacity-Catalog Project</title>
+
+<!-- CSS -->
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='css/bootstrap.css') }}">
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	<h2>Add New Category</h2>
-	<form action="" method="POST">
-		<input type="text" name="categoryName" placeholder="Category Name" />
-		<br /> <br /> 
-		<!-- <input type="text" name="categoryDescription" placeholder="Category Description" /> <br /> <br /> --> 
-		<input type="submit"  name="submit"  value="Add" /> <span>|</span> 
-		<input type="submit"  name="submit"	value="Cancel" /> <br />
-	</form>
+	<main class="container"> <header class="row">
+		<h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
+		<div class="col-md-6"></div>
+		<!--<h1 class="col-md-2 text-right"><a href="#">Login</a></h1>-->
+		<div class="col-md-2 text-right">
+			<form method="GET" action="{{url_for('showLogin')}}">
+				<button type="submit" class="text-center btn btn-default login">Login</button>
+			</form>
+		</div>
+	</header>
+	<section class="row">
+		<section class="items">
+			<h2>Add New Category</h2>
+			<form action="" method="POST">
+				<input type="text" name="categoryName" placeholder="Category Name" />
+				<br /> <br /> 
+				<!-- <input type="text" name="categoryDescription" placeholder="Category Description" /> <br /> <br /> --> 
+				<input type="submit"  name="submit" class="btn btn-primary" value="Add" /> 
+				<!-- <span>|</span> --> 
+				<input type="submit"  name="submit" class="btn btn-primary" value="Cancel" /> <br />
+			</form>
+		</section>
+	</section>
+	</main>
 </body>
 </html>

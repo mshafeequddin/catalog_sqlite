@@ -52,7 +52,7 @@ class Item(Base):
             'id': self.id,
             'category_id': self.category_id
             }
-
+        
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)
