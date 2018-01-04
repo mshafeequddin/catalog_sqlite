@@ -1,57 +1,66 @@
+<!-- Same as category.html but will only display information i.e. 
+for unregistered users -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Udacity-Catalog Project</title>
-
-<!-- CSS -->
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="description" content="Udacity Catalog, ECommerce">
+    <meta name="author" content="Shafeequddin Mohammed">
+    <meta name="keywords" content="Electronics, Clothing, ECommerce, Sales, Buy">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udacity-Catalog Project</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	<main class="container"> <header class="row">
-		<h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
-		<div class="col-md-6"></div>
-		<!--<h1 class="col-md-2 text-right"><a href="#">Login</a></h1>-->
-		<div class="col-md-2 text-right">
-			<form method="GET" action="{{url_for('showLogin')}}">
-				<button type="submit" class="text-center btn btn-default login">Login</button>
-			</form>
-		</div>
-	</header>
-	<section class="row vdivide">
-		<sidebar class="col-md-3">
-		<h2>Categories</h2>
-		<form action="#" method="POST">
-			<a href="{{url_for('add_category')}}">Add New Category(+)</a> 
-			<!-- <br /> <br /> -->
-			<hr/>
-			<ul class="text-left">
-
-				{% for category in categories %}
-				<li>
-					<a
-						href="{{url_for('show_category_items', category_name = category.name)}}"><span class="item-category">{{category.name}}</span>
-					</a>
-				</li>
-				{% endfor %}
-			</ul>
-		</form>
-		</sidebar>
-		<section class="col-md-9 items">
-			<h2>{{category.name}}</h2>
-			<ul class="text-left">
- 				{% for item in items %}
- 				<li>
- 					<a href="{{url_for('show_item', category_name = category.name, item_name = item.name)}}"><span class="item-category">{{item.name}}</span></a>
-				</li>
-				{% endfor %}
-			</ul>
-		</section>
-	</section>
-	</main>
+<main class="container">
+    <header class="row">
+        <h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
+        <div class="col-md-6"></div>
+        <div class="col-md-2 text-right">
+            {% if not session['username'] %}
+            <form method="GET" action="{{url_for('showLogin')}}">
+                <button type="submit" class="text-center btn btn-default login">Login</button>
+            </form>
+            {% endif %}
+            {% if session['username'] %}
+            <form method="GET" action="{{url_for('gdisconnect')}}">
+                <button type="submit" class="text-center btn btn-default login">Logout</button>
+            </form>
+            {% endif %}
+        </div>
+    </header>
+    <section class="row vdivide">
+        <sidebar class="col-md-3">
+            <h2>Categories</h2>
+            <form action="#" method="POST">
+                <a href="{{url_for('add_category')}}">Add New Category(+)</a>
+                <hr/>
+                <ul class="text-left">
+                    {% for category in categories %}
+                    <li>
+                        <a
+                                href="{{url_for('show_category_items', category_name = category.name)}}"><span
+                                class="item-category">{{category.name}}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </form>
+        </sidebar>
+        <section class="col-md-9 items">
+            <h2>{{category.name}}</h2>
+            <ul class="text-left">
+                {% for item in items %}
+                <li>
+                    <a href="{{url_for('show_item', category_name = category.name, item_name = item.name)}}"><span
+                            class="item-category">{{item.name}}</span></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </section>
+</main>
 </body>
 </html>

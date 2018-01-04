@@ -1,62 +1,84 @@
+<!-- This is the home page of the application which will list all the categories 
+and the 5 latest  items -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Udacity-Catalog Project</title>
-
-<!-- CSS -->
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/style.css') }}">
-<!-- <link href="static/bootstrap.css" rel="stylesheet" type="text/css">
-<link href="static/style.css" rel="stylesheet" type="text/css"> -->
+    <meta charset="UTF-8">
+    <meta name="description" content="Udacity Catalog, ECommerce">
+    <meta name="author" content="Shafeequddin Mohammed">
+    <meta name="keywords" content="Electronics, Clothing, ECommerce, Sales, Buy">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udacity-Catalog Project</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	<main class="container"> <header class="row">
-		<h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
-		<div class="col-md-6"></div>
-		<!--<h1 class="col-md-2 text-right"><a href="#">Login</a></h1>-->
-		<div class="col-md-2 text-right">
-			<form method="GET" action="{{url_for('showLogin')}}">
-				<button type="submit" class="text-center btn btn-default login">Login</button>
-			</form>
-		</div>
-		<!--<h1 class="col-md-2 text-right"><a href="#">Logout</a></h1>-->
-	</header>
-	<section class="row vdivide">
-		<sidebar class="col-md-3">
-		<h2>Categories</h2>
-		<form action="#" method="POST">
-			<a href="{{url_for('add_category')}}">Add New Category(+)</a>
-			<!-- <br /> <br /> -->
-			<hr />
-			<ul class="text-left">
-
-				{% for category in categories %}
-				<li><a
-					href="{{url_for('show_category_items', category_name = category.name)}}"><span class="item-category">{{category.name}}</span>
-				</a></li> {% endfor %}
-			</ul>
-		</form>
-		</sidebar>
-		<section class="col-md-9 items">
-			<h2>Latest Items</h2>
-			<a href="{{url_for('add_item',category_name = categories[0].name)}}">
-				Add New IItem(+) </a>
-			<hr />
-			<ul class="text-left">
-				{% for item in latestItems %}
-				<li>
-				<a href="{{url_for('show_item', category_name = item.categoryName, item_name = item.itemName)}}"><span class="item-category">{{item.itemName}}</span></a>
-				<span class="latest-category">({{item.categoryName}})</span>					
-				</li> 
-				{% endfor %}
-				
-			</ul>
-		</section>
-	</section>
-	</main>
+    <main class="container">
+        <header class="row">
+            <h1 class="col-md-4 text-left">
+                <a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a>
+            </h1>
+            <div class="col-md-6"></div>
+            <div class="col-md-2 text-right">
+                {% if not session['username'] %}
+                <form method="GET" action="{{url_for('showLogin')}}">
+                    <button type="submit" class="text-center btn btn-default login">Login</button>
+                </form>
+                {% endif %}
+                {% if session['username'] %}
+                <form method="GET" action="{{url_for('gdisconnect')}}">
+                    <button type="submit" class="text-center btn btn-default login">Logout</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
+        <!-- Message Flashing -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            <ul>
+                {% for message in messages %}
+                <li><strong> {{message}} </strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+        <section class="row vdivide">
+            <sidebar class="col-md-3">
+                <h2>Categories</h2>
+                <form action="#" method="POST">
+                    <a href="{{url_for('add_category')}}">Add New Category(+)</a>
+                    <!-- <br /> <br /> -->
+                    <hr/>
+                    <ul class="text-left">
+                        {% for category in categories %}
+                        <li><a
+                                href="{{url_for('show_category_items', category_name = category.name)}}"><span
+                                class="item-category">{{category.name}}</span>
+                        </a></li>
+                        {% endfor %}
+                    </ul>
+                </form>
+            </sidebar>
+            <section class="col-md-9 items">
+                <h2>Latest Items</h2>
+                <!-- just passing a category as part of the method requirement but will not be used -->
+                <a href="{{url_for('add_item',category_name = categories[0].name)}}">
+                    Add New IItem(+) </a>
+                <hr/>
+                <ul class="text-left">
+                    {% for item in latestItems %}
+                    <li>
+                        <a href="{{url_for('show_item', category_name = item.categoryName, item_name = item.itemName)}}"><span
+                                class="item-category">{{item.itemName}}</span></a>
+                        <span class="latest-category">({{item.categoryName}})</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </section>
+    </main>
 </body>
 </html>

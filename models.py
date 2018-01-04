@@ -1,3 +1,5 @@
+# Database model using sqlalchemy
+
 from sqlalchemy.engine import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.schema import Column, ForeignKey
@@ -7,6 +9,7 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 
+# User table
 class User(Base):
     __tablename__ = 'user'
     
@@ -16,6 +19,7 @@ class User(Base):
     picture = Column(String(250))
 
 
+# Category table
 class Category(Base):
     __tablename__ = 'category'
     
@@ -33,6 +37,7 @@ class Category(Base):
             }
 
 
+# Item table
 class Item(Base):
     __tablename__ = 'item'
     

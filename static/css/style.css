@@ -1,8 +1,3 @@
-/* h1 {
-	color: white;
-}
- */
- 
 .latest-category {
 	color: gray;
 	font-style: italic;
@@ -11,7 +6,11 @@
 .item-category {
 	color: #ff3300;
 }
- 
+
+.flash-messages {
+	background-color: green;
+}
+
 .app {
 	color: red;
 }
@@ -41,16 +40,8 @@ ul {
 	padding-left: 0px;
 }
 
-.row.vdivide [class*='col-']:not (:last-child ):after {
-	background: #e0e0e0;
-	width: 1px;
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0.5em;
-	bottom: 0.5em;
-	right: 0;
-	min-height: 70px;
+.flash-messages.ul {
+	
 }
 
 .login {

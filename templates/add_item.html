@@ -1,49 +1,56 @@
+<!--  This is to add new Item within a category into the catalog -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Udacity-Catalog Project</title>
-
-<!-- CSS -->
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<link rel="stylesheet"
-	href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="description" content="Udacity Catalog, ECommerce">
+    <meta name="author" content="Shafeequddin Mohammed">
+    <meta name="keywords" content="Electronics, Clothing, ECommerce, Sales, Buy">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udacity-Catalog Project</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	<main class="container"> <header class="row">
-		<h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
-		<div class="col-md-6"></div>
-		<!--<h1 class="col-md-2 text-right"><a href="#">Login</a></h1>-->
-		<div class="col-md-2 text-right">
-			<form method="GET" action="{{url_for('showLogin')}}">
-				<button type="submit" class="text-center btn btn-default login">Login</button>
-			</form>
-		</div>
-	</header>
-	<section class="row">
-		<section>
-			<h2>Add New Item</h2>
-			<form action="" method="POST">
-				<input type="text" name="itemName" placeholder="Item Name" /> <br />
-				<br /> <input type="text" name="itemDescription"
-					placeholder="Item Description" /> <br /> <br />
-				<div>
-					<select name="categoryName"> 
-					{% for category in categories %}
-						<option value={{category.id}}>{{category.name}}</option> 
-					{% endfor %}
-					</select>
-				</div>
-				<br /> <input type="submit" name="submit" class="btn btn-primary"
-					value="Add" />
-				<!-- <span>|</span> -->
-				<input type="submit" name="submit" class="btn btn-primary"
-					value="Cancel" /> <br />
-			</form>
-		</section>
-	</section>
-	</main>
+    <main class="container">
+        <header class="row">
+            <h1 class="col-md-4 text-left"><a href="{{url_for('show_categories')}}" style="color:white">Catalog App</a></h1>
+            <div class="col-md-6"></div>
+            <div class="col-md-2 text-right">
+                {% if not session['username'] %}
+                <form method="GET" action="{{url_for('showLogin')}}">
+                    <button type="submit" class="text-center btn btn-default login">Login</button>
+                </form>
+                {% endif %}
+                {% if session['username'] %}
+                <form method="GET" action="{{url_for('gdisconnect')}}">
+                    <button type="submit" class="text-center btn btn-default login">Logout</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
+        <section class="row">
+            <section>
+                <h2>Add New Item</h2>
+                <form action="" method="POST">
+                    <input type="text" name="itemName" placeholder="Item Name"/> <br/>
+                    <br/> <input type="text" name="itemDescription"
+                                 placeholder="Item Description"/> <br/> <br/>
+                    <div>
+                        <select name="categoryName">
+                            {% for category in categories %}
+                            <option value={{category.id}}>{{category.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br/> <input type="submit" name="submit" class="btn btn-primary"
+                                 value="Add"/>
+                    <input type="submit" name="submit" class="btn btn-primary"
+                           value="Cancel"/> <br/>
+                </form>
+            </section>
+        </section>
+    </main>
 </body>
 </html>
