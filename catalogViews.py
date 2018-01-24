@@ -96,7 +96,10 @@ def show_item(category_name, item_name):
             items = session.query(Item).filter_by(category_id=category.id
                                                   ).order_by(Item.category_id
                                                              ).all()
-            suser_id = login_session['user_id']
+            try:
+                suser_id = login_session['user_id']
+            except:
+                suser_id = None
             if 'username' not in login_session or item.user_id != suser_id:
                 return render_template('public_item.html',
                                        category=category, item=item,
@@ -124,6 +127,17 @@ def edit_item(category_name, item_name):
         if category is not None:
             item = session.query(Item).filter_by(category_id=category.id,
                                                  name=item_name).first()
+
+        # Check to see if the user is authorized to edit the item.
+        try:
+            suser_id = login_session['user_id']
+        except:
+            suser_id = None
+        if item.user_id != suser_id or suser_id is None:
+            flash("Unauthorized to edit the item")
+            return redirect(url_for('show_item',
+                                    category_name=category_name,
+                                    item_name=item_name))
 
         if request.method == 'GET':
             return render_template('edit_item.html',
@@ -156,6 +170,17 @@ def delete_item(category_name, item_name):
         if category is not None:
             item = session.query(Item).filter_by(category_id=category.id,
                                                  name=item_name).first()
+
+        # Check to see if the user is authorized to edit the item.
+        try:
+            suser_id = login_session['user_id']
+        except:
+            suser_id = None
+        if item.user_id != suser_id or suser_id is None:
+            flash("Unauthorized to delete the item")
+            return redirect(url_for('show_item',
+                                    category_name=category_name,
+                                    item_name=item_name))
         if request.method == 'GET':
             return render_template('delete_item.html',
                                    category=category, item=item)
@@ -228,6 +253,14 @@ def edit_category(category_name):
     if 'username' not in login_session:
         return redirect('/login')
     category = {'name': 'Electronics1', 'id': '1'}
+    # Check to see if the user is authorized to edit the item.
+    try:
+        suser_id = login_session['user_id']
+    except:
+        suser_id = None
+    if category.user_id != suser_id or suser_id is None:
+        flash("Unauthorized to edit the category")
+        return redirect(url_for('show_categories'))
     return render_template('edit_category.html', category=category)
 
 
@@ -239,6 +272,15 @@ def delete_category(category_name):
     if 'username' not in login_session:
         return redirect('/login')
     category = {'name': 'Electronics', 'id': '1'}
+    # Check to see if the user is authorized to edit the item.
+    try:
+        suser_id = login_session['user_id']
+    except:
+        suser_id = None
+    if category.user_id != suser_id or suser_id is None:
+        flash("Unauthorized to delete the category")
+        return redirect(url_for('show_categories'))
+
     return render_template('delete_category.html', category=category)
 
 
